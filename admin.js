@@ -1,4 +1,4 @@
-import { watchMenu, saveMenu } from './firebase.js';
+import { watchMenu, saveMenu, adminMode, adminLogout } from './firebase.js';
 
 let data = structuredClone(DEFAULT_DATA);
 let loaded = false;
@@ -8,12 +8,19 @@ let filterCat = 'all';
 let query = '';
 const $ = id => document.getElementById(id);
 
-// الدخول للوحة يتم بضغطة مطولة (ثانيتان) على زر السلة في الموقع
-$('app').hidden = false;
-$('fab').hidden = false;
-$('topActions').hidden = false;
-watchMenu(d => { if (!loaded) { data = d; loaded = true; renderAll(); } });
-renderAll();
+// الدخول للوحة: ضغطتان على زر السلة في الموقع ثم الرمز
+let mode = null;
+adminMode().then(m => {
+  if (!m) { location.replace('index.html'); return; }
+  mode = m;
+  $('app').hidden = false;
+  $('fab').hidden = false;
+  $('topActions').hidden = false;
+  $('trialBar').hidden = m !== 'trial';
+  watchMenu(d => { if (!loaded) { data = d; loaded = true; renderAll(); } });
+  renderAll();
+});
+$('logoutBtn').onclick = async () => { await adminLogout(); location.replace('index.html'); };
 
 // ---------- أدوات ----------
 let toastTimer;
@@ -26,6 +33,7 @@ function toast(msg, bad) {
 
 async function persist(okMsg = 'تم الحفظ ✓') {
   renderAll();
+  if (mode === 'trial') { toast('وضع تجريبي: التعديل يظهر هنا فقط ولا يُحفظ', true); return; }
   try { await saveMenu(data); toast(okMsg); }
   catch (e) { toast('فشل الحفظ: ' + (e.code || e.message), true); throw e; }
 }

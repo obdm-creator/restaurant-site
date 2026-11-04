@@ -56,6 +56,19 @@
     </div>
   </aside>
 
+  <div class="modal" id="gate" hidden>
+    <div class="sheet gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+      <img src="logo.png" alt="" class="gate-logo">
+      <strong id="gateTitle">رمز الدخول</strong>
+      <label class="field"><span class="sr-only">الرمز</span>
+        <input id="gateCode" type="password" inputmode="numeric" maxlength="8" autocomplete="off" class="gate-input">
+      </label>
+      <div class="error" id="gateErr" role="alert"></div>
+      <button class="btn" id="gateOk" type="button">دخول</button>
+      <button class="btn ghost" id="gateCancel" type="button" style="margin-top:8px">إلغاء</button>
+    </div>
+  </div>
+
   <script src="shared.js"></script>
   <script type="module" src="app.js"></script>
 </body>

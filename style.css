@@ -163,3 +163,10 @@ th { color: var(--muted); font-weight: 600; font-size: .85rem; }
 @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 @media (prefers-reduced-motion: reduce) { .hero-logo img { animation: none; } }
 @media (max-width: 420px) { .brand-name { font-size: 1.1rem; } .brand-img { width: 40px; height: 40px; } }
+
+/* نافذة رمز الدخول */
+.gate { text-align: center; max-width: 340px; }
+.gate-logo { width: 84px; height: 84px; border-radius: 50%; object-fit: cover; border: 2px solid var(--red); margin: 0 auto 8px; display: block; }
+.gate strong { display: block; font-size: 1.15rem; margin-bottom: 12px; }
+.gate-input { text-align: center; font-size: 1.6rem !important; letter-spacing: 10px; }
+.trial-bar { background: #3a2a06; border: 1px solid #a8801a; color: #ffd36b; border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: .9rem; }

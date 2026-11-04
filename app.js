@@ -1,4 +1,4 @@
-import { watchMenu } from './firebase.js';
+import { watchMenu, adminLogin } from './firebase.js';
 
 let data;
 let activeCat = 'all';
@@ -8,20 +8,43 @@ let locationUrl = '';
 
 const $ = id => document.getElementById(id);
 
-// ضغطة مطولة (ثانيتان) على زر السلة تفتح لوحة التحكم مباشرة
-let holdTimer, holdFired = false;
+// ضغطة واحدة على السلة تفتحها، ضغطتان سريعتان تفتحان نافذة رمز لوحة التحكم
 const cartBtn = $('cartBtn');
-cartBtn.addEventListener('pointerdown', () => {
-  holdFired = false;
-  clearTimeout(holdTimer);
-  holdTimer = setTimeout(() => {
-    holdFired = true;
-    navigator.vibrate?.(60);
-    location.href = 'admin.html';
-  }, 2000);
+let tapTimer = null;
+cartBtn.addEventListener('click', () => {
+  if (tapTimer) {               // الضغطة الثانية
+    clearTimeout(tapTimer); tapTimer = null;
+    openGate();
+    return;
+  }
+  tapTimer = setTimeout(() => { tapTimer = null; toggleCart(true); }, 300);
 });
-['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => cartBtn.addEventListener(ev, () => clearTimeout(holdTimer)));
-cartBtn.addEventListener('contextmenu', e => e.preventDefault());
+
+function openGate() {
+  $('gateErr').textContent = '';
+  $('gateCode').value = '';
+  $('gate').hidden = false;
+  setTimeout(() => $('gateCode').focus(), 50);
+}
+const closeGate = () => { $('gate').hidden = true; };
+
+async function submitGate() {
+  const code = $('gateCode').value.trim();
+  if (!code) return;
+  $('gateOk').disabled = true;
+  $('gateErr').textContent = '';
+  const res = await adminLogin(code);
+  $('gateOk').disabled = false;
+  if (res.ok) { location.href = 'admin.html'; return; }
+  $('gateErr').textContent = res.error;
+  $('gateCode').value = '';
+  $('gateCode').focus();
+}
+$('gateOk').onclick = submitGate;
+$('gateCode').addEventListener('keydown', e => { if (e.key === 'Enter') submitGate(); });
+$('gateCancel').onclick = closeGate;
+$('gate').addEventListener('mousedown', e => { if (e.target === $('gate')) closeGate(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGate(); });
 
 $('cName').value = localStorage.getItem('rs_name') || '';
 $('cPhone').value = localStorage.getItem('rs_phone') || '';
@@ -117,7 +140,6 @@ document.addEventListener('click', e => {
   if (t.dataset.dec) change(t.dataset.dec, -1);
 });
 $('search').addEventListener('input', e => { query = e.target.value; renderMenu(); });
-cartBtn.onclick = () => { if (holdFired) { holdFired = false; return; } toggleCart(true); };
 $('closeCart').onclick = $('overlay').onclick = () => toggleCart(false);
 
 // تحديد الموقع
