@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>لوحة التحكم</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo"><span>لوحة</span> التحكم</div>
+    <div class="actions" id="topActions" hidden>
+      <button class="icon-btn" id="openSettings" aria-label="الإعدادات">⚙️</button>
+      <a class="icon-btn" href="index.html" aria-label="عرض الموقع">🌐</a>
+    </div>
+  </header>
+
+  <main class="container" id="app" hidden>
+    <div class="stats">
+      <div class="stat"><b id="stItems">0</b><span>وجبة</span></div>
+      <div class="stat"><b id="stCats">0</b><span>قسم</span></div>
+      <div class="stat"><b id="stOff">0</b><span>غير متوفر</span></div>
+    </div>
+
+    <div class="toolbar">
+      <input class="search" id="aSearch" type="search" placeholder="ابحث في الوجبات..." aria-label="بحث" style="margin:0">
+      <button class="btn small alt" id="openCats">إدارة الأقسام</button>
+    </div>
+    <nav class="cats" id="aCats" aria-label="تصفية الأقسام"></nav>
+
+    <div class="agrid" id="itemList"></div>
+  </main>
+
+  <button class="fab" id="fab" aria-label="إضافة وجبة" hidden>+</button>
+
+  <!-- نافذة الوجبة -->
+  <div class="modal" id="mItem" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="itemFormTitle">
+      <div class="sheet-head"><strong id="itemFormTitle">إضافة وجبة</strong><button data-close aria-label="إغلاق">×</button></div>
+
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="اختيار صورة من المعرض">
+        <div class="prev" id="iPrev"></div>
+        <div class="drop-text" id="dropText">📷 اضغط لاختيار صورة من المعرض</div>
+      </div>
+      <input id="iImg" type="file" accept="image/*" hidden>
+      <div class="actions" style="margin:8px 0 12px">
+        <button class="btn small alt" id="iPick" type="button">اختيار من المعرض</button>
+        <button class="btn small ghost" id="iRemoveImg" type="button" hidden>إزالة الصورة</button>
+      </div>
+
+      <label class="field"><span>اسم الوجبة *</span><input id="iName"></label>
+      <div class="form-grid">
+        <label class="field"><span>السعر *</span><input id="iPrice" type="number" min="0" step="any" inputmode="decimal"></label>
+        <label class="field"><span>القسم *</span><select id="iCat"></select></label>
+      </div>
+      <button class="link" id="iAddCat" type="button">+ قسم جديد</button>
+      <label class="field" id="newCatBox" hidden><span>اسم القسم الجديد</span><input id="iNewCat"></label>
+      <label class="field"><span>الوصف</span><input id="iDesc" placeholder="مثال: لحم، جبن، خس"></label>
+      <label class="field"><span>رمز بديل عند عدم وجود صورة (إيموجي)</span><input id="iEmoji" maxlength="4" placeholder="🍔"></label>
+      <label class="check"><input id="iAvail" type="checkbox" checked> متوفر للطلب</label>
+      <label class="check"><input id="iHot" type="checkbox"> 🔥 الأكثر طلباً</label>
+
+      <div class="error" id="iErr" role="alert"></div>
+      <button class="btn" id="iSave">حفظ</button>
+    </div>
+  </div>
+
+  <!-- نافذة الأقسام -->
+  <div class="modal" id="mCats" hidden>
+    <div class="sheet" role="dialog" aria-modal="true">
+      <div class="sheet-head"><strong>الأقسام</strong><button data-close aria-label="إغلاق">×</button></div>
+      <div class="form-grid" style="margin-bottom:12px">
+        <label class="field" style="margin:0"><span>قسم جديد</span><input id="cName"></label>
+        <button class="btn small" id="cAdd">إضافة</button>
+      </div>
+      <div id="catRows"></div>
+    </div>
+  </div>
+
+  <!-- نافذة الإعدادات -->
+  <div class="modal" id="mSettings" hidden>
+    <div class="sheet" role="dialog" aria-modal="true">
+      <div class="sheet-head"><strong>الإعدادات</strong><button data-close aria-label="إغلاق">×</button></div>
+      <label class="field"><span>اسم المطعم</span><input id="sName"></label>
+      <label class="field"><span>رقم واتساب (مع رمز الدولة)</span><input id="sWa" inputmode="numeric" placeholder="9647700000000"></label>
+      <label class="field"><span>العملة</span><input id="sCur"></label>
+      <div class="error" id="sErr" role="alert"></div>
+      <button class="btn" id="sSave">حفظ الإعدادات</button>
+      <p class="hint" style="margin:14px 0 8px">قائمة جاهزة للتجربة</p>
+      <button class="btn small alt" data-sample type="button">تحميل أمثلة جاهزة</button>
+      <p class="hint" style="margin:14px 0 8px">نسخة احتياطية</p>
+      <div class="actions">
+        <button class="btn small alt" id="exp">تصدير</button>
+        <label class="btn small ghost" style="cursor:pointer">استيراد<input id="imp" type="file" accept="application/json" hidden></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="shared.js"></script>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
