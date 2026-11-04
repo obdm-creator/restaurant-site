@@ -50,6 +50,10 @@ $('gateCancel').onclick = closeGate;
 $('gate').addEventListener('mousedown', e => { if (e.target === $('gate')) closeGate(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGate(); });
 
+// رابط تطبيق وطن: يُخفى التذييل إذا لم يُضبط الرابط بعد
+if (WATAN_STORE_URL.startsWith('http')) $('watanLink').href = WATAN_STORE_URL;
+else document.querySelector('.credit').hidden = true;
+
 $('cName').value = localStorage.getItem('rs_name') || '';
 $('cPhone').value = localStorage.getItem('rs_phone') || '';
 

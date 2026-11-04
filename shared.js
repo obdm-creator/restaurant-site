@@ -1,3 +1,6 @@
+// رابط تطبيق وطن في المتجر (يظهر في أسفل الموقع)
+const WATAN_STORE_URL = 'https://play.google.com/store/apps/details?id=com.orhan.watan&hl=ar';
+
 // بيانات الموقع المشتركة بين الواجهة ولوحة التحكم
 // قائمة أمثلة جاهزة: تظهر تلقائياً قبل أن تضيف قائمتك، ويمكن تحميلها من لوحة التحكم > الإعدادات
 const DEFAULT_DATA = {
