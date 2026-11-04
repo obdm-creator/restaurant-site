@@ -3,17 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>مطعم الوجبات السريعة</title>
+  <title>Extra Sauce</title>
+  <meta name="description" content="Extra Sauce - وجبات سريعة، اطلب مباشرة عبر واتساب">
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="icon" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <meta property="og:title" content="Extra Sauce">
+  <meta property="og:image" content="logo.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="header">
-    <div class="logo" id="logo"></div>
+    <a class="brand" href="#top" aria-label="Extra Sauce">
+      <img src="logo.png" alt="" class="brand-img" onerror="this.remove()">
+      <span class="brand-name">EXTRA <b>SAUCE</b></span>
+    </a>
     <button class="cart-btn" id="cartBtn" aria-label="فتح السلة">🛒 السلة (<span id="cartCount">0</span>)</button>
   </header>
 
-  <section class="hero">
-    <h1>وجبات <em>سريعة</em> بطعم لا يُنسى</h1>
+  <section class="hero" id="top">
+    <div class="hero-logo">
+      <img src="logo.png" alt="شعار Extra Sauce" onerror="this.parentElement.classList.add('no-img')">
+      <div class="hero-fallback" aria-hidden="true">EXTRA<br><b>SAUCE</b></div>
+    </div>
+    <h1>نكهة <em>قوية</em>.. وصوص زيادة</h1>
     <p>اختر وجبتك، حدد موقعك، وأرسل طلبك عبر واتساب</p>
   </section>
 

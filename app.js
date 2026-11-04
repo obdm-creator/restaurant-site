@@ -30,8 +30,8 @@ $('cPhone').value = localStorage.getItem('rs_phone') || '';
 watchMenu(d => {
   data = d;
   const s = data.settings;
+  if (!s.name || s.name === 'برجر هاوس') s.name = 'Extra Sauce'; // الاسم القديم المحفوظ
   document.title = s.name;
-  $('logo').innerHTML = esc(s.name).replace(/^(\S+)/, '<span>$1</span>');
   if (activeCat !== 'all' && !data.categories.some(c => c.id === activeCat)) activeCat = 'all';
   renderCats();
   renderMenu();

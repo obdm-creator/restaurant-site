@@ -139,3 +139,27 @@ th { color: var(--muted); font-weight: 600; font-size: .85rem; }
 /* زر السلة: منع تحديد النص والقائمة عند الضغط المطول */
 #cartBtn { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: manipulation; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* ===== هوية Extra Sauce ===== */
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--white); }
+.brand-img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 2px solid var(--red); box-shadow: 0 0 12px rgba(216,20,28,.45); }
+.brand-name { font-family: Impact, 'Arial Black', sans-serif; font-size: 1.35rem; letter-spacing: 1px; line-height: 1; direction: ltr; }
+.brand-name b { color: var(--red); font-weight: 400; }
+
+.hero { position: relative; overflow: hidden; padding: 28px 16px 30px; background:
+  radial-gradient(circle at 50% 35%, rgba(216,20,28,.28), transparent 60%), var(--black); }
+.hero::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--red), transparent); }
+.hero-logo { width: min(240px, 62vw); aspect-ratio: 1; margin: 0 auto 10px; position: relative; }
+.hero-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+  box-shadow: 0 0 0 3px var(--black), 0 0 0 5px var(--red), 0 0 40px rgba(216,20,28,.55);
+  animation: breathe 3.5s ease-in-out infinite; }
+.hero-fallback { display: none; }
+.hero-logo.no-img img { display: none; }
+.hero-logo.no-img .hero-fallback { display: flex; align-items: center; justify-content: center; height: 100%;
+  border-radius: 50%; border: 3px solid var(--red); font: 2.4rem/1 Impact, 'Arial Black', sans-serif; text-align: center; }
+.hero-fallback b { color: var(--red); font-weight: 400; }
+.hero h1 { font-size: 1.7rem; }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+@media (prefers-reduced-motion: reduce) { .hero-logo img { animation: none; } }
+@media (max-width: 420px) { .brand-name { font-size: 1.1rem; } .brand-img { width: 40px; height: 40px; } }
