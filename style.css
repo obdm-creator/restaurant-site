@@ -170,3 +170,6 @@ th { color: var(--muted); font-weight: 600; font-size: .85rem; }
 .gate strong { display: block; font-size: 1.15rem; margin-bottom: 12px; }
 .gate-input { text-align: center; font-size: 1.6rem !important; letter-spacing: 10px; }
 .trial-bar { background: #3a2a06; border: 1px solid #a8801a; color: #ffd36b; border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; font-size: .9rem; }
+
+/* منع التحديد والقائمة عند الضغط المطول على الشعار */
+.brand, .hero-logo, .brand img, .hero-logo img { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-user-drag: none; touch-action: manipulation; }

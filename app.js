@@ -8,16 +8,20 @@ let locationUrl = '';
 
 const $ = id => document.getElementById(id);
 
-// ضغطة واحدة على السلة تفتحها، ضغطتان سريعتان تفتحان نافذة رمز لوحة التحكم
-const cartBtn = $('cartBtn');
-let tapTimer = null;
-cartBtn.addEventListener('click', () => {
-  if (tapTimer) {               // الضغطة الثانية
-    clearTimeout(tapTimer); tapTimer = null;
-    openGate();
-    return;
-  }
-  tapTimer = setTimeout(() => { tapTimer = null; toggleCart(true); }, 300);
+// زر السلة يفتح السلة فقط
+$('cartBtn').addEventListener('click', () => toggleCart(true));
+
+// ضغطة مطولة (ثانية واحدة) على شعار المطعم تفتح نافذة رمز لوحة التحكم
+document.querySelectorAll('.brand, .hero-logo').forEach(el => {
+  let t, fired = false;
+  el.addEventListener('pointerdown', () => {
+    fired = false; clearTimeout(t);
+    t = setTimeout(() => { fired = true; navigator.vibrate?.(50); openGate(); }, 1000);
+  });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => el.addEventListener(ev, () => clearTimeout(t)));
+  el.addEventListener('contextmenu', e => e.preventDefault());
+  el.addEventListener('dragstart', e => e.preventDefault());
+  el.addEventListener('click', e => { if (fired) { e.preventDefault(); fired = false; } });
 });
 
 function openGate() {
