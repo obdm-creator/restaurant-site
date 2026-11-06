@@ -29,7 +29,7 @@ export async function adminLogin(code) {
   try {
     if (configured) {
       const snap = await getDoc(ref);
-      const savedCode = snap.exists() ? (snap.data()?.settings?.adminCode || '1234') : '1234';
+      const savedCode = snap.exists() ? (snap.data()?.settings?.adminCode || '4400') : '4400';
       if (code === savedCode) {
         sessionStorage.setItem('rs_admin', 'auth');
         return { ok: true };
