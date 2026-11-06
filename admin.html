@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex,nofollow">
   <title>لوحة التحكم</title>
   <link rel="icon" href="logo.png">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=1793976635">
 </head>
 <body>
   <header class="header">
@@ -72,12 +72,32 @@
   <!-- نافذة الأقسام -->
   <div class="modal" id="mCats" hidden>
     <div class="sheet" role="dialog" aria-modal="true">
-      <div class="sheet-head"><strong>الأقسام</strong><button data-close aria-label="إغلاق">×</button></div>
-      <div class="form-grid" style="margin-bottom:12px">
-        <label class="field" style="margin:0"><span>قسم جديد</span><input id="cName"></label>
-        <button class="btn small" id="cAdd">إضافة</button>
-      </div>
+      <div class="sheet-head"><strong>إدارة الأقسام</strong><button data-close aria-label="إغلاق">×</button></div>
+      <button class="btn" id="cAdd" style="margin-bottom:14px">+ إضافة قسم جديد</button>
       <div id="catRows"></div>
+    </div>
+  </div>
+
+  <!-- نافذة تعديل/إضافة قسم -->
+  <div class="modal" id="mCatEdit" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="catFormTitle">
+      <div class="sheet-head"><strong id="catFormTitle">قسم جديد</strong><button data-close aria-label="إغلاق">×</button></div>
+
+      <!-- صورة القسم -->
+      <div class="drop" id="catDrop" tabindex="0" role="button" aria-label="اختيار صورة القسم">
+        <div class="prev" id="catPrev"></div>
+        <div class="drop-text" id="catDropText">📷 اضغط لاختيار صورة للقسم</div>
+      </div>
+      <input id="catImg" type="file" accept="image/*" hidden>
+      <div class="actions" style="margin:8px 0 12px">
+        <button class="btn small alt" id="catPick" type="button">اختيار من المعرض</button>
+        <button class="btn small ghost" id="catRemoveImg" type="button" hidden>إزالة الصورة</button>
+      </div>
+
+      <label class="field"><span>اسم القسم *</span><input id="cName" placeholder="مثال: برجر، دجاج، مشروبات"></label>
+      <label class="field"><span>إيموجي (اختياري)</span><input id="cEmoji" maxlength="4" placeholder="🍔"></label>
+      <div class="error" id="cErr" role="alert"></div>
+      <button class="btn" id="cSave">حفظ القسم</button>
     </div>
   </div>
 
@@ -88,6 +108,7 @@
       <label class="field"><span>اسم المطعم</span><input id="sName"></label>
       <label class="field"><span>رقم واتساب (مع رمز الدولة)</span><input id="sWa" inputmode="numeric" placeholder="9647700000000"></label>
       <label class="field"><span>العملة</span><input id="sCur"></label>
+      <label class="field"><span>رمز الدخول للوحة التحكم</span><input id="sCode" type="password" placeholder="الرمز الحالي: 1234"></label>
       <div class="error" id="sErr" role="alert"></div>
       <button class="btn" id="sSave">حفظ الإعدادات</button>
       <p class="hint" style="margin:14px 0 8px">قائمة جاهزة للتجربة</p>
@@ -102,7 +123,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="shared.js"></script>
-  <script type="module" src="admin.js"></script>
+  <script src="shared.js?v=1793976635"></script>
+  <script type="module" src="admin.js?v=1793976635"></script>
 </body>
 </html>

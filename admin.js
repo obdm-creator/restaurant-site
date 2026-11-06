@@ -16,7 +16,7 @@ adminMode().then(m => {
   $('app').hidden = false;
   $('fab').hidden = false;
   $('topActions').hidden = false;
-  $('trialBar').hidden = m !== 'trial';
+  $('trialBar').hidden = true;
   watchMenu(d => { if (!loaded) { data = d; loaded = true; renderAll(); } });
   renderAll();
 });
@@ -33,7 +33,6 @@ function toast(msg, bad) {
 
 async function persist(okMsg = 'تم الحفظ ✓') {
   renderAll();
-  if (mode === 'trial') { toast('وضع تجريبي: التعديل يظهر هنا فقط ولا يُحفظ', true); return; }
   try { await saveMenu(data); toast(okMsg); }
   catch (e) { toast('فشل الحفظ: ' + (e.code || e.message), true); throw e; }
 }
@@ -48,7 +47,7 @@ document.querySelectorAll('[data-close]').forEach(b => b.onclick = closeModals);
 function renderAll() {
   renderStats(); renderFilter(); renderItems(); renderCatSelect(); renderCatRows();
   const s = data.settings;
-  $('sName').value = s.name; $('sWa').value = s.whatsapp; $('sCur').value = s.currency;
+  $('sName').value = s.name; $('sWa').value = s.whatsapp; $('sCur').value = s.currency; $('sCode').value = '';
 }
 
 function renderStats() {
@@ -99,28 +98,94 @@ function renderCatSelect() {
 
 function renderCatRows() {
   $('catRows').innerHTML = data.categories.map((c, idx) => `
-    <div class="line">
-      <div class="name">${esc(c.name)} <small style="color:#a8a8a8">(${data.items.filter(i => i.catId === c.id).length})</small></div>
-      <div class="actions">
-        <button class="mini" data-up="${idx}" aria-label="أعلى">▲</button>
-        <button class="mini" data-down="${idx}" aria-label="أسفل">▼</button>
-        <button class="mini" data-rencat="${esc(c.id)}" aria-label="تعديل الاسم">✏️</button>
-        <button class="mini" data-delcat="${esc(c.id)}" aria-label="حذف">🗑️</button>
+    <div class="icard" style="margin-bottom:10px">
+      <div class="thumb-lg" ${c.img ? `style="background-image:url('${esc(c.img)}')"` : ''}>${c.img ? '' : esc(c.emoji || '📂')}</div>
+      <div class="info">
+        <strong>${esc(c.name)}</strong>
+        <small style="color:#a8a8a8">${data.items.filter(i => i.catId === c.id).length} وجبة</small>
+      </div>
+      <div class="side">
+        <div class="actions">
+          <button class="mini" data-up="${idx}" aria-label="أعلى" ${idx === 0 ? 'disabled style="opacity:.3"' : ''}>▲</button>
+          <button class="mini" data-down="${idx}" aria-label="أسفل" ${idx === data.categories.length - 1 ? 'disabled style="opacity:.3"' : ''}>▼</button>
+          <button class="mini" data-editcat="${esc(c.id)}" aria-label="تعديل">✏️</button>
+          <button class="mini" data-delcat="${esc(c.id)}" aria-label="حذف">🗑️</button>
+        </div>
       </div>
     </div>`).join('') || '<div class="empty">لا توجد أقسام</div>';
 }
 
 // ---------- الأقسام ----------
+let catEditId = null;
+let catImgData = null;
+
 $('openCats').onclick = () => openModal('mCats');
-$('cAdd').onclick = addCat;
-$('cName').addEventListener('keydown', e => { if (e.key === 'Enter') addCat(); });
-function addCat() {
-  const name = $('cName').value.trim();
-  if (!name) return;
-  data.categories.push({ id: uid('c'), name });
-  $('cName').value = '';
-  persist().catch(() => {});
+$('cAdd').onclick = () => openCatForm(null);
+
+function setCatPreview(src) {
+  $('catPrev').style.backgroundImage = src ? `url('${src}')` : '';
+  $('catDropText').hidden = !!src;
+  $('catRemoveImg').hidden = !src;
 }
+
+function openCatForm(cat) {
+  catEditId = cat ? cat.id : null;
+  catImgData = null;
+  $('catFormTitle').textContent = cat ? 'تعديل القسم' : 'قسم جديد';
+  $('cName').value = cat ? cat.name : '';
+  $('cEmoji').value = cat ? (cat.emoji || '') : '';
+  $('cErr').textContent = '';
+  $('catImg').value = '';
+  setCatPreview(cat ? cat.img || '' : '');
+  closeModals();
+  openModal('mCatEdit');
+  setTimeout(() => $('cName').focus(), 50);
+}
+
+const pickCatImage = () => $('catImg').click();
+$('catDrop').onclick = pickCatImage;
+$('catDrop').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickCatImage(); } });
+$('catPick').onclick = pickCatImage;
+$('catRemoveImg').onclick = () => { catImgData = ''; $('catImg').value = ''; setCatPreview(''); };
+['dragover', 'drop'].forEach(ev => $('catDrop').addEventListener(ev, e => {
+  e.preventDefault();
+  if (ev === 'drop' && e.dataTransfer.files[0]) readCatImage(e.dataTransfer.files[0]);
+}));
+$('catImg').onchange = e => { if (e.target.files[0]) readCatImage(e.target.files[0]); };
+
+function readCatImage(f) {
+  if (!f.type.startsWith('image/')) { $('cErr').textContent = 'اختر ملف صورة'; return; }
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      const max = 400, r = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * r); c.height = Math.round(img.height * r);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      catImgData = c.toDataURL('image/jpeg', 0.75);
+      setCatPreview(catImgData);
+      $('cErr').textContent = '';
+    };
+    img.onerror = () => { $('cErr').textContent = 'تعذر قراءة الصورة'; };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(f);
+}
+
+$('cSave').onclick = () => {
+  const name = $('cName').value.trim();
+  if (!name) { $('cErr').textContent = 'اكتب اسم القسم'; return; }
+  if (catEditId) {
+    const cat = data.categories.find(c => c.id === catEditId);
+    cat.name = name;
+    cat.emoji = $('cEmoji').value.trim();
+    if (catImgData !== null) cat.img = catImgData;
+  } else {
+    data.categories.push({ id: uid('c'), name, emoji: $('cEmoji').value.trim(), img: catImgData || '' });
+  }
+  persist().then(() => { closeModals(); openModal('mCats'); }).catch(() => {});
+};
 
 // ---------- الوجبات ----------
 $('fab').onclick = () => openItemForm(null);
@@ -228,18 +293,14 @@ document.addEventListener('click', e => {
   if (d.toggle) { const it = data.items.find(i => i.id === d.toggle); it.available = !it.available; persist().catch(() => {}); }
   if (d.del && confirm('حذف هذه الوجبة؟')) { data.items = data.items.filter(i => i.id !== d.del); persist().catch(() => {}); }
   if (d.edit) openItemForm(data.items.find(i => i.id === d.edit));
+  if (d.editcat) { openCatForm(data.categories.find(c => c.id === d.editcat)); }
   if (d.delcat) {
     const n = data.items.filter(i => i.catId === d.delcat).length;
     if (confirm(n ? `سيتم حذف القسم و${n} وجبة. متابعة؟` : 'حذف هذا القسم؟')) {
       data.categories = data.categories.filter(c => c.id !== d.delcat);
       data.items = data.items.filter(i => i.catId !== d.delcat);
-      persist().catch(() => {});
+      persist().then(() => openModal('mCats')).catch(() => {});
     }
-  }
-  if (d.rencat) {
-    const c = data.categories.find(c => c.id === d.rencat);
-    const name = prompt('اسم القسم الجديد', c.name);
-    if (name && name.trim()) { c.name = name.trim(); persist().catch(() => {}); }
   }
   if (d.up !== undefined || d.down !== undefined) {
     const i = Number(d.up ?? d.down), j = d.up !== undefined ? i - 1 : i + 1;
@@ -256,7 +317,13 @@ $('sSave').onclick = () => {
   const wa = waNumber($('sWa').value);
   if (!$('sName').value.trim() || wa.length < 8) { $('sErr').textContent = 'تحقق من الاسم ورقم الواتساب'; return; }
   $('sErr').textContent = '';
-  Object.assign(data.settings, { name: $('sName').value.trim(), whatsapp: wa, currency: $('sCur').value.trim() || 'د.ع' });
+  const newCode = $('sCode').value.trim();
+  Object.assign(data.settings, {
+    name: $('sName').value.trim(),
+    whatsapp: wa,
+    currency: $('sCur').value.trim() || 'د.ع',
+    adminCode: newCode || data.settings.adminCode || '1234'
+  });
   persist().then(closeModals).catch(() => {});
 };
 

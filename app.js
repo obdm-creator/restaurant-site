@@ -8,9 +8,6 @@ let locationUrl = '';
 
 const $ = id => document.getElementById(id);
 
-// زر السلة يفتح السلة فقط
-$('cartBtn').addEventListener('click', () => toggleCart(true));
-
 // ضغطة مطولة (ثانية واحدة) على شعار المطعم تفتح نافذة رمز لوحة التحكم
 document.querySelectorAll('.brand, .hero-logo').forEach(el => {
   let t, fired = false;
@@ -57,11 +54,11 @@ else document.querySelector('.credit').hidden = true;
 $('cName').value = localStorage.getItem('rs_name') || '';
 $('cPhone').value = localStorage.getItem('rs_phone') || '';
 
-// تحديث لحظي: أي تعديل من لوحة التحكم يظهر مباشرة
+// تحديث القائمة: يقرأ من localStorage مباشرة
 watchMenu(d => {
   data = d;
   const s = data.settings;
-  if (!s.name || s.name === 'برجر هاوس') s.name = 'Extra Sauce'; // الاسم القديم المحفوظ
+  if (!s.name || s.name === 'برجر هاوس') s.name = 'Extra Sauce';
   document.title = s.name;
   if (activeCat !== 'all' && !data.categories.some(c => c.id === activeCat)) activeCat = 'all';
   renderCats();
@@ -70,9 +67,14 @@ watchMenu(d => {
 }, () => { $('menu').innerHTML = '<div class="empty">تعذر تحميل القائمة</div>'; });
 
 function renderCats() {
-  const all = [{ id: 'all', name: 'الكل' }, ...data.categories];
-  $('cats').innerHTML = all.map(c =>
-    `<button class="chip ${c.id === activeCat ? 'active' : ''}" data-id="${esc(c.id)}">${c.emoji ? esc(c.emoji) + ' ' : ''}${esc(c.name)}</button>`).join('');
+  const all = [{ id: 'all', name: 'الكل', emoji: '🍽️', img: '' }, ...data.categories];
+  $('cats').innerHTML = all.map(c => `
+    <button class="cat-card ${c.id === activeCat ? 'active' : ''}" data-id="${esc(c.id)}">
+      <div class="cat-card-img" ${c.img ? `style="background-image:url('${esc(c.img)}')"` : ''}>
+        ${c.img ? '' : `<span class="cat-card-emoji">${esc(c.emoji || '📂')}</span>`}
+      </div>
+      <span class="cat-card-name">${esc(c.name)}</span>
+    </button>`).join('');
 }
 
 function itemCard(i) {
@@ -84,7 +86,7 @@ function itemCard(i) {
       <p>${esc(i.desc)}</p>
       <div class="row">
         <span class="price">${fmt(i.price, data.settings.currency)}</span>
-        <button class="add" data-add="${esc(i.id)}" ${i.available ? '' : 'disabled'}>${i.available ? 'أضف +' : 'غير متوفر'}</button>
+        ${!i.available ? '<span class="add" style="background:#444;cursor:not-allowed;padding:8px 14px;border-radius:8px;font-weight:700;">غير متوفر</span>' : ''}
       </div>
     </div>
   </article>`;

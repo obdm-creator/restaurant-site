@@ -17,8 +17,7 @@ button { cursor: pointer; border: 0; }
 .header { background: var(--black); border-bottom: 3px solid var(--red); padding: 14px 16px; position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; }
 .logo { font-size: 1.5rem; font-weight: 800; }
 .logo span { color: var(--red); }
-.cart-btn { background: var(--red); color: var(--white); padding: 8px 16px; border-radius: 999px; font-weight: 700; }
-.cart-btn:hover { background: var(--red-dark); }
+
 
 .hero { text-align: center; padding: 36px 16px 24px; background: linear-gradient(180deg, #1c0507, var(--black)); }
 .hero h1 { font-size: 2rem; }
@@ -28,9 +27,19 @@ button { cursor: pointer; border: 0; }
 .container { max-width: 1100px; margin: 0 auto; padding: 16px; }
 .search { width: 100%; padding: 12px 16px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--white); margin-bottom: 12px; }
 
-.cats { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; }
+.cats { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.cats::-webkit-scrollbar { display: none; }
+
+/* chips في لوحة التحكم فقط */
 .chip { background: var(--card); color: var(--white); border: 1px solid var(--line); padding: 8px 18px; border-radius: 999px; white-space: nowrap; }
 .chip.active { background: var(--red); border-color: var(--red); font-weight: 700; }
+.cat-card { display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--card); border: 2px solid var(--line); border-radius: 14px; padding: 0; min-width: 80px; max-width: 90px; overflow: hidden; transition: border-color .15s, transform .15s; flex-shrink: 0; cursor: pointer; }
+.cat-card:hover { border-color: var(--red); transform: translateY(-2px); }
+.cat-card.active { border-color: var(--red); background: #2a0a0c; }
+.cat-card-img { width: 100%; height: 64px; background: #261012 center/cover no-repeat; display: flex; align-items: center; justify-content: center; }
+.cat-card-emoji { font-size: 1.8rem; line-height: 1; }
+.cat-card-name { font-size: .8rem; font-weight: 700; color: var(--white); padding: 0 6px 8px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.cat-card.active .cat-card-name { color: var(--red); }
 
 .cat-title { margin: 24px 0 12px; font-size: 1.3rem; border-right: 4px solid var(--red); padding-right: 10px; }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
@@ -136,8 +145,7 @@ th { color: var(--muted); font-weight: 600; font-size: .85rem; }
 .card .img { position: relative; }
 .badge { position: absolute; top: 8px; right: 8px; background: var(--red); color: var(--white); font-size: .75rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
 
-/* زر السلة: منع تحديد النص والقائمة عند الضغط المطول */
-#cartBtn { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: manipulation; }
+
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
 /* ===== هوية Extra Sauce ===== */

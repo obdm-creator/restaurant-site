@@ -6,8 +6,9 @@ const WATAN_STORE_URL = 'https://play.google.com/store/apps/details?id=com.orhan
 const DEFAULT_DATA = {
   settings: {
     name: 'Extra Sauce',
-    whatsapp: '9647749797666', // 07749797666 بالصيغة الدولية (العراق 964)
-    currency: 'د.ع'
+    whatsapp: '9647749797666',
+    currency: 'د.ع',
+    adminCode: '1234'
   },
   categories: [
     { id: 'c1', name: 'برجر', emoji: '🍔' },
@@ -15,8 +16,7 @@ const DEFAULT_DATA = {
     { id: 'c3', name: 'ساندويشات', emoji: '🌯' },
     { id: 'c4', name: 'بيتزا', emoji: '🍕' },
     { id: 'c5', name: 'جانبية', emoji: '🍟' },
-    { id: 'c6', name: 'مشروبات', emoji: '🥤' },
-    { id: 'c7', name: 'حلويات', emoji: '🍰' }
+    { id: 'c6', name: 'مشروبات', emoji: '🥤' }
   ],
   items: [
     { id: 'i1', catId: 'c1', emoji: '🍔', name: 'برجر كلاسيك', desc: 'لحم بقري، جبن شيدر، خس، طماطم، صوص خاص', price: 5000, img: '', available: true, hot: true },
@@ -33,9 +33,7 @@ const DEFAULT_DATA = {
     { id: 'i12', catId: 'c5', emoji: '🧅', name: 'حلقات البصل', desc: '8 حلقات مقرمشة', price: 2500, img: '', available: true },
     { id: 'i13', catId: 'c5', emoji: '🧀', name: 'أصابع الجبن', desc: '6 قطع مع صوص الطماطم', price: 3000, img: '', available: true },
     { id: 'i14', catId: 'c6', emoji: '🥤', name: 'كولا', desc: 'علبة 330 مل', price: 1000, img: '', available: true },
-    { id: 'i15', catId: 'c6', emoji: '🧃', name: 'عصير برتقال طازج', desc: 'كوب 400 مل', price: 2000, img: '', available: true },
-    { id: 'i16', catId: 'c7', emoji: '🍦', name: 'آيس كريم', desc: 'ثلاث نكهات حسب الاختيار', price: 2500, img: '', available: true },
-    { id: 'i17', catId: 'c7', emoji: '🍰', name: 'كيك الشوكولاتة', desc: 'قطعة مع صوص الشوكولاتة', price: 3500, img: '', available: false }
+    { id: 'i15', catId: 'c6', emoji: '🧃', name: 'عصير برتقال طازج', desc: 'كوب 400 مل', price: 2000, img: '', available: true }
   ]
 };
 
