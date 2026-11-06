@@ -8,7 +8,7 @@ const DEFAULT_DATA = {
     name: 'Extra Sauce',
     whatsapp: '9647749797666',
     currency: 'د.ع',
-    adminCode: '1234'
+    adminCode: '4400'
   },
   categories: [
     { id: 'c1', name: 'برجر', emoji: '🍔' },

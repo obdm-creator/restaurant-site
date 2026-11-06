@@ -37,7 +37,7 @@ export async function adminLogin(code) {
       return { ok: false, error: 'الرمز غير صحيح' };
     }
     // fallback: بدون Firebase
-    if (code === '1234') { sessionStorage.setItem('rs_admin', 'auth'); return { ok: true }; }
+    if (code === '4400') { sessionStorage.setItem('rs_admin', 'auth'); return { ok: true }; }
     return { ok: false, error: 'الرمز غير صحيح' };
   } catch (e) {
     return { ok: false, error: 'تعذر التحقق، تحقق من الاتصال' };
